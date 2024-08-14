@@ -29,6 +29,7 @@ import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
 import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import TaskIcon from '@mui/icons-material/Task';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -55,12 +56,15 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(!isMobile);
   const [selected, setSelected] = useState("Dashboard");
+  const [getUser, setgetUser] = useState({})
 
   useEffect(() => {
     setIsSidebarVisible(!isMobile);
+    setgetUser(JSON.parse(localStorage.getItem("name")))
   }, [isMobile]);
+  console.log(getUser)
 
-  return  (
+  return (
     <Box display="flex" height="100vh">
       {isMobile && (
         <IconButton
@@ -136,13 +140,7 @@ const Sidebar = () => {
             {!isCollapsed && (
               <Box mb="25px">
                 <Box display="flex" justifyContent="center" alignItems="center">
-                  <img
-                    alt="profile-user"
-                    width="100px"
-                    height="100px"
-                    src={`../../assets/profile.jpg`}
-                    style={{ cursor: "pointer", borderRadius: "50%" }}
-                  />
+                  <AccountCircleIcon style={{ fontSize: 80, color: colors.grey[100] }} />
                 </Box>
                 <Box textAlign="center">
                   <Typography
@@ -151,10 +149,10 @@ const Sidebar = () => {
                     fontWeight="bold"
                     sx={{ m: "10px 0 0 0" }}
                   >
-                    Murtaza Mahmood
+                    {getUser && getUser.name}
                   </Typography>
                   <Typography variant="h5" color={colors.greenAccent[500]}>
-                    Software Developer
+                    {getUser && getUser.designation}
                   </Typography>
                 </Box>
               </Box>
@@ -163,7 +161,7 @@ const Sidebar = () => {
             <Box paddingLeft={isCollapsed ? undefined : "10%"}>
               <Item
                 title="Dashboard"
-                to="/"
+                to="/dashboard"
                 icon={<HomeOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
@@ -248,42 +246,46 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
-              <Typography
-                variant="h6"
-                color={colors.grey[300]}
-                sx={{ m: "15px 0 5px 20px" }}
-              >
-                Payroll and Invoices
-              </Typography>
-              <Item
-                title="Create Invoice"
-                to="/createinvoice"
-                icon={<ReceiptLongIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-              <Item
-                title="View Invoices"
-                to="/view"
-                icon={<ReceiptOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-              <Item
-                title="Payroll Info"
-                to="/employeeinfo"
-                icon={<PaymentIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
+              {["manager", "admin"].includes(getUser.role) && (
+                <>
+                  <Typography
+                    variant="h6"
+                    color={colors.grey[300]}
+                    sx={{ m: "15px 0 5px 20px" }}
+                  >
+                    Payroll and Invoices
+                  </Typography>
+                  <Item
+                    title="Create Invoice"
+                    to="/createinvoice"
+                    icon={<ReceiptLongIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                  <Item
+                    title="View Invoices"
+                    to="/view"
+                    icon={<ReceiptOutlinedIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                  <Item
+                    title="Payroll Info"
+                    to="/employeeinfo"
+                    icon={<PaymentIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                  <Item
+                    title="Salary Calculation"
+                    to="/earninganddeductions"
+                    icon={<PaymentsIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </>
+              )}
 
-              <Item
-                title="Salary Calculation"
-                to="/earninganddeductions"
-                icon={<PaymentsIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
               <Typography
                 variant="h6"
                 color={colors.grey[300]}
@@ -292,13 +294,6 @@ const Sidebar = () => {
                 Employee Data
               </Typography>
 
-              <Item
-                title="Contacts Information"
-                to="/contacts"
-                icon={<ContactsOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
               <Item
                 title="Create User"
                 to="/createuser"
@@ -328,12 +323,20 @@ const Sidebar = () => {
                 setSelected={setSelected}
               />
               <Item
+                title="Personal AI"
+                to="/ChatBot"
+                icon={<FeedbackIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
                 title="Feedbacks"
                 to="/feedback"
                 icon={<FeedbackIcon />}
                 selected={selected}
                 setSelected={setSelected}
               />
+
               <Typography
                 variant="h6"
                 color={colors.grey[300]}
@@ -352,15 +355,17 @@ const Sidebar = () => {
           </Menu>
         </ProSidebar>
       </Box>
+      <Box>
+      </Box>
       <Box
-        // sx={{
-        //   flexGrow: 1,
-        //   ml: isSidebarVisible && !isMobile ? (isCollapsed ? "80px" : "100px") : "0",
-        //   transition: "margin-left 0.3s",
-        //   height: "100vh",
-        //   overflow: "auto",
-        //   padding: "20px",
-        // }}
+      // sx={{
+      //   flexGrow: 1,
+      //   ml: isSidebarVisible && !isMobile ? (isCollapsed ? "80px" : "100px") : "0",
+      //   transition: "margin-left 0.3s",
+      //   height: "100vh",
+      //   overflow: "auto",
+      //   padding: "20px",
+      // }}
       >
         {/* Main content goes here */}
       </Box>

@@ -13,7 +13,7 @@ const CreateUser = () => {
   useEffect(() => {
     const getManagers = async () => {
       try {
-        const { data } = await axios.get('https://murtazamahm007-abidipro.mdbgo.io/api/getUser');
+        const { data } = await axios.get('https://hr-backend-gamma.vercel.app/api/getUser');
         const managers = data.filter(user => user.status === 'Manager');
         setManagers(managers);
       } catch (error) {
@@ -27,14 +27,14 @@ const CreateUser = () => {
   const handleFormSubmit = async (values) => {
     console.log('Form values:', values); // Log form values for debugging
     try {
-      const response = await axios.post('https://murtazamahm007-abidipro.mdbgo.io/api/users/create-user', {
+      const response = await axios.post('https://hr-backend-gamma.vercel.app/api/users/create-user', {
         ...values,
         birthday: values.birthday ? new Date(values.birthday).toISOString() : null,
       });
       console.log('Response:', response.data); // Log API response for debugging
       alert('User created successfully');
 
-      await axios.get('https://murtazamahm007-abidipro.mdbgo.io/api/createUser/mail', {
+      await axios.get('https://hr-backend-gamma.vercel.app/api/createUser/mail', {
         params: {
           personalEmail: values.personalEmail,
           email: values.email,

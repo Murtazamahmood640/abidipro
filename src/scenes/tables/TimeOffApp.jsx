@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import {
   Box,
   Button,
@@ -18,8 +16,10 @@ import {
   Paper,
   Modal,
   Grid,
+  Alert,
 } from '@mui/material';
 import { tokens } from '../../theme';
+import Header from '../../components/Header';
 
 const TimeoffApp = () => {
   const theme = useTheme();
@@ -30,11 +30,13 @@ const TimeoffApp = () => {
   const [projects, setProjects] = useState([]);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
+  const [approvedRequests, setApprovedRequests] = useState(new Set());
+  const [alertMessage, setAlertMessage] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get('https://murtazamahm007-abidipro.mdbgo.io/api/timeoff');
+        const { data } = await axios.get('https://hr-backend-gamma.vercel.app/api/timeoff');
         setProjects(data);
       } catch (error) {
         console.error('Error fetching data: ', error);
@@ -48,28 +50,33 @@ const TimeoffApp = () => {
     setEditingIndex(null);
   };
 
-  const handleApprove = async (index, reason, off_date, end_date, email, name) => {
-    setEditingIndex(index);
+  const handleApprove = async (id, reason, off_date, end_date, email, name) => {
     try {
-      const res = await axios.post("https://murtazamahm007-abidipro.mdbgo.io/api/timeoff/approve", {
-        id: index
-      });
-      toast.success(res.data.message);
-      window.location.reload();
-      await axios.get("https://murtazamahm007-abidipro.mdbgo.io/api/timeoff/mail", {
+      const res = await axios.post("https://hr-backend-gamma.vercel.app/api/timeoff/approve", { id });
+  
+      alert(res.data.message);
+  
+      await axios.get("https://hr-backend-gamma.vercel.app/api/timeoff/mail", {
         params: {
-          id: index,
-          reason: reason,
-          off_date: off_date,
-          end_date: end_date,
-          email: email,
-          name: name
+          email,
+          reason,
+          off_date,
+          end_date
         }
       });
+  
+      setApprovedRequests(prev => new Set(prev).add(id));
+  
+      // Add a small delay before reloading the page
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+  
     } catch (e) {
       console.log(e);
     }
   };
+  
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -87,12 +94,12 @@ const TimeoffApp = () => {
 
     try {
       if (editingIndex !== null) {
-        const updatedProject = await axios.put(`https://murtazamahm007-abidipro.mdbgo.io/api/timeoff/${projects[editingIndex]._id}`, formData);
+        const updatedProject = await axios.put(`https://hr-backend-gamma.vercel.app/api/timeoff/${projects[editingIndex]._id}`, formData);
         const updatedProjects = [...projects];
         updatedProjects[editingIndex] = updatedProject.data;
         setProjects(updatedProjects);
       } else {
-        const newProject = await axios.post('https://murtazamahm007-abidipro.mdbgo.io/api/timeoff', formData);
+        const newProject = await axios.post('https://hr-backend-gamma.vercel.app/api/timeoff', formData);
         setProjects([...projects, newProject.data]);
       }
       setPopupOpen(false);
@@ -104,62 +111,72 @@ const TimeoffApp = () => {
   };
 
   return (
-    <Container maxWidth="lg">
-      <Box display="flex" justifyContent="center" mt={5}>
-        <Box flex={1} p={3} bgcolor={colors.primary[400]} borderRadius={3} boxShadow={3}>
-          <Typography variant="h4" gutterBottom>
-            Time off Approval
-          </Typography>
-          <Box display="flex" justifyContent="space-between" mb={2}>
-            {/* <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAddProjectClick}
-            >
-              Add
-            </Button> */}
-          </Box>
-          <Box sx={{ height: '70vh', overflowY: 'auto' }}>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Type of Time-Off</TableCell>
-                    <TableCell>Reason for Time-Off</TableCell>
-                    <TableCell>From</TableCell>
-                    <TableCell>To</TableCell>
-                    <TableCell>Approved</TableCell>
-                    <TableCell>Action</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {projects.map((project, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{project.Type_of_Time_Off}</TableCell>
-                      <TableCell>{project.Reason_for_Time_Off}</TableCell>
-                      <TableCell>{project.Name}</TableCell>
-                      <TableCell>{project.To}</TableCell>
-                      <TableCell style={{ textAlign: 'center' }}>
-                        {project.Approved ? 'Approved' : 'X'}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          color="success"
-                          disabled={project.Approved}
-                          onClick={() => handleApprove(project._id, project.Reason_for_Time_Off, project.To, project.From, project.Email, project.Name)}
-                          sx={{ backgroundColor: project.Approved ? '#919191' : '#1dd1a1' }}
-                        >
-                          Approve
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
-        </Box>
+    <Box m="20px">
+      <Header title="TIME OFF APPROVAL" subtitle="Manage Time Off Requests" />
+      <Box
+        m="40px 0 0 0"
+        height="75vh"
+        sx={{
+          "& .MuiTableContainer-root": { border: "none" },
+          "& .MuiTable-root": { borderBottom: "none" },
+          "& .MuiTableHead-root": {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+          },
+          "& .MuiTableBody-root": {
+            backgroundColor: colors.primary[400],
+          },
+        }}
+      >
+        {alertMessage && (
+          <Alert severity="success" onClose={() => setAlertMessage(null)}>
+            {alertMessage}
+          </Alert>
+        )}
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Type of Time-Off</TableCell>
+                <TableCell>Reason for Time-Off</TableCell>
+                <TableCell>From</TableCell>
+                <TableCell>To</TableCell>
+                <TableCell>Approved</TableCell>
+                <TableCell>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {projects.length > 0 ? projects.map((project, index) => (
+                <TableRow key={index}>
+                  <TableCell>{project.Type_of_Time_Off || 'N/A'}</TableCell>
+                  <TableCell>{project.Reason_for_Time_Off || 'N/A'}</TableCell>
+                  <TableCell>{project.From || 'N/A'}</TableCell>
+                  <TableCell>{project.To || 'N/A'}</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>
+                    {project.Approved ? 'Approved' : 'X'}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      color="success"
+                      disabled={project.Approved || approvedRequests.has(project._id)}
+                      onClick={() => handleApprove(project._id, project.Reason_for_Time_Off, project.From, project.To, project.Email, project.Name)}
+                      sx={{ backgroundColor: project.Approved ? '#919191' : '#1dd1a1' }}
+                    >
+                      Approve
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              )) : (
+                <TableRow>
+                  <TableCell colSpan={6} style={{ textAlign: 'center' }}>
+                    No Time-Off Requests Available
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
       <Modal open={isPopupOpen} onClose={handlePopupClose}>
         <Box
@@ -238,8 +255,7 @@ const TimeoffApp = () => {
           </form>
         </Box>
       </Modal>
-      <ToastContainer />
-    </Container>
+    </Box>
   );
 };
 

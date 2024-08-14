@@ -46,7 +46,7 @@ const Account = () => {
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     axios
-      .get(`https://murtazamahm007-abidipro.mdbgo.io/api/users/user/${userId}`)
+      .get(`https://hr-backend-gamma.vercel.app/api/users/user/${userId}`)
       .then((response) => {
         const userData = response.data;
         setFormData({
@@ -102,7 +102,7 @@ const Account = () => {
     const userId = localStorage.getItem("userId");
 
     try {
-      await axios.put("https://murtazamahm007-abidipro.mdbgo.io/api/users/updateAccount", { userId, ...formData });
+      await axios.put("https://hr-backend-gamma.vercel.app/api/users/updateAccount", { userId, ...formData });
       alert("Account updated successfully");
       window.location.reload();
     } catch (error) {
@@ -122,7 +122,7 @@ const Account = () => {
       formData.append("email", localStorage.getItem("email"));
       formData.append("file", file);
 
-      const response = await fetch("https://murtazamahm007-abidipro.mdbgo.io/api/profile", {
+      const response = await fetch("https://hr-backend-gamma.vercel.app/api/profile", {
         method: "POST",
         body: formData,
       });

@@ -1,27 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Box, Button, TextField, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import {
+  Box,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Checkbox,
+  ListItemText,
+} from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateProject = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const [users, setUsers] = useState([]);
-  const [selectedLead, setSelectedLead] = useState('');
+  const [selectedLead, setSelectedLead] = useState("");
   const [selectedMembers, setSelectedMembers] = useState([]);
+  const [isMembersDropdownOpen, setIsMembersDropdownOpen] = useState(false);
 
   useEffect(() => {
     const getAllUsers = async () => {
       try {
-        const { data } = await axios.get('https://murtazamahm007-abidipro.mdbgo.io/api/getUser');
-        const userNames = data.map(user => user.name); // Extract only names
+        const { data } = await axios.get(
+          "https://hr-backend-gamma.vercel.app/api/getUser"
+        );
+        const userNames = data.map((user) => user.name); // Extract only names
         setUsers(userNames);
       } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error("Error fetching users:", error);
       }
     };
 
@@ -39,16 +52,26 @@ const CreateProject = () => {
 
     try {
       if (values._id) {
-        await axios.put(`https://murtazamahm007-abidipro.mdbgo.io/api/projects/${values._id}`, formData);
-        toast.success('Project updated successfully');
+        await axios.put(
+          `https://hr-backend-gamma.vercel.app/api/projects/${values._id}`,
+          formData
+        );
+        toast.success("Project updated successfully");
       } else {
-        await axios.post('https://murtazamahm007-abidipro.mdbgo.io/api/projects', formData);
-        toast.success('Project added successfully');
+        await axios.post(
+          "https://hr-backend-gamma.vercel.app/api/projects",
+          formData
+        );
+        toast.success("Project added successfully");
       }
     } catch (error) {
-      console.error('Error processing project:', error);
-      toast.error('Error processing project');
+      console.error("Error processing project:", error);
+      toast.error("Error processing project");
     }
+  };
+
+  const handleMembersDropdownClose = () => {
+    setIsMembersDropdownOpen(false);
   };
 
   return (
@@ -98,34 +121,66 @@ const CreateProject = () => {
                 helperText={touched.projectName && errors.projectName}
                 sx={{ gridColumn: "span 6" }}
               />
-              <FormControl fullWidth variant="filled" sx={{ gridColumn: "span 6" }}>
+              <FormControl
+                fullWidth
+                variant="filled"
+                sx={{ gridColumn: "span 6" }}
+              >
                 <InputLabel>Lead</InputLabel>
                 <Select
                   value={selectedLead}
                   onChange={(e) => setSelectedLead(e.target.value)}
-                  onBlur={handleBlur}
-                  label="Lead"
+                  onClose={() => document.activeElement.blur()} // Close on selection
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: 200, // Adjust height to add a scrollbar
+                      },
+                    },
+                  }}
                 >
-                  {users.map(user => (
-                    <MenuItem key={user} value={user}>{user}</MenuItem>
+                  {users.map((user) => (
+                    <MenuItem key={user} value={user}>
+                      {user}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
-              <FormControl fullWidth variant="filled" sx={{ gridColumn: "span 6" }}>
+
+              <FormControl
+                fullWidth
+                variant="filled"
+                sx={{ gridColumn: "span 6" }}
+              >
                 <InputLabel>Assigned Members</InputLabel>
                 <Select
                   multiple
                   value={selectedMembers}
                   onChange={(e) => setSelectedMembers(e.target.value)}
-                  renderValue={(selected) => selected.join(', ')}
-                  onBlur={handleBlur}
-                  label="Assigned Members"
+                  renderValue={(selected) => selected.join(", ")}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: 200, // Adjust height to add a scrollbar
+                      },
+                    },
+                  }}
                 >
-                  {users.map(user => (
-                    <MenuItem key={user} value={user}>{user}</MenuItem>
+                  {users.map((user) => (
+                    <MenuItem key={user} value={user}>
+                      <Checkbox checked={selectedMembers.indexOf(user) > -1} />
+                      <ListItemText primary={user} />
+                    </MenuItem>
                   ))}
+                  <Button
+                    onClick={() => document.activeElement.blur()}
+                    style={{ marginTop: "10px" }}
+                  >
+                    Okay
+                  </Button>
                 </Select>
               </FormControl>
+
               <TextField
                 fullWidth
                 variant="filled"
@@ -157,7 +212,7 @@ const CreateProject = () => {
             </Box>
             <Box display="flex" justifyContent="flex-end" mt="20px">
               <Button type="submit" color="primary" variant="contained">
-                {values._id ? 'Save Changes' : 'Add Project'}
+                {values._id ? "Save Changes" : "Add Project"}
               </Button>
             </Box>
           </form>
@@ -167,11 +222,5 @@ const CreateProject = () => {
     </Box>
   );
 };
-
-const validationSchema = yup.object().shape({
-  projectName: yup.string().required("Project Name is required"),
-  startDate: yup.date().required("Start Date is required"),
-  endDate: yup.date().required("End Date is required"),
-});
 
 export default CreateProject;

@@ -6,7 +6,7 @@ import { tokens } from "../../theme";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from "../../components/Header";
-
+ 
 const TaskStatus = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -14,41 +14,43 @@ const TaskStatus = () => {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
   const [reFetch, setReFetch] = useState(false);
+  const currentUser = JSON.parse(localStorage.getItem("name"));
 
   useEffect(() => {
     fetchTasks();
   }, [reFetch]);
-
+ 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get('https://murtazamahm007-abidipro.mdbgo.io/api/create-tasks', {
-        params: { name: localStorage.getItem("name") },
+      const response = await axios.get('https://hr-backend-gamma.vercel.app/api/create-tasks', {
+        params: { name: currentUser.name },
       });
+      console.log("response",response)
       setProjects(response.data);
     } catch (error) {
       toast.error("Failed to fetch tasks");
     }
   };
-
+ 
   const handleEditClick = (project) => {
     setEditingProject(project);
     setPopupOpen(true);
   };
-
+ 
   const handleDeleteClick = async (id) => {
     try {
-      await axios.delete(`https://murtazamahm007-abidipro.mdbgo.io/api/deleteTask`, { params: { _id: id } });
+      await axios.delete(`https://hr-backend-gamma.vercel.app/api/deleteTask`, { params: { _id: id } });
       setReFetch(!reFetch);
     } catch (error) {
       toast.error("Failed to delete task");
     }
   };
-
+ 
   const handlePopupClose = () => {
     setPopupOpen(false);
     setEditingProject(null);
   };
-
+ 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const formData = {
@@ -58,13 +60,13 @@ const TaskStatus = () => {
       date: e.target.date.value,
       taskpriority: e.target.taskpriority.value,
     };
-
+ 
     try {
       if (editingProject) {
-        await axios.put(`https://murtazamahm007-abidipro.mdbgo.io/api/assigned-tasks/${editingProject._id}`, formData);
+        await axios.put(`https://hr-backend-gamma.vercel.app/api/assigned-tasks/${editingProject._id}`, formData);
         toast.success("Task updated successfully");
       } else {
-        await axios.post('https://murtazamahm007-abidipro.mdbgo.io/api/assigned-tasks', formData);
+        await axios.post('https://hr-backend-gamma.vercel.app/api/assigned-tasks', formData);
         toast.success("Task created successfully");
       }
       fetchTasks();
@@ -73,7 +75,7 @@ const TaskStatus = () => {
       toast.error("Failed to save the task");
     }
   };
-
+ 
   const columns = [
     { field: "projectName", headerName: "Project Name", flex: 1 },
     { field: "taskName", headerName: "Task Name", flex: 1 },
@@ -82,19 +84,19 @@ const TaskStatus = () => {
     { field: "assignedBy", headerName: "Assigned By", flex: 1 },
     { field: "startDate", headerName: "Start Date", flex: 1, renderCell: (params) => params.value.slice(0, 10) },
     { field: "endDate", headerName: "End Date", flex: 1, renderCell: (params) => params.value.slice(0, 10) },
-    {
-      field: "actions",
-      headerName: "Actions",
-      flex: 1,
-      renderCell: (params) => (
-        <Box>
-          {/* <Button variant="contained" color="primary" onClick={() => handleEditClick(params.row)}>Edit</Button> */}
-          <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(params.row._id)}>Delete</Button>
-        </Box>
-      ),
-    },
+    // {
+    //   field: "actions",
+    //   headerName: "Actions",
+    //   flex: 1,
+    //   renderCell: (params) => (
+    //     <Box>
+    //       {/* <Button variant="contained" color="primary" onClick={() => handleEditClick(params.row)}>Edit</Button> */}
+    //       <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(params.row._id)}>Delete</Button>
+    //     </Box>
+    //   ),
+    // },
   ];
-
+ 
   return (
     <Box m="20px">
       <Header title="TASK STATUS" subtitle="Manage Your Tasks" />
@@ -118,15 +120,41 @@ const TaskStatus = () => {
         }}
       >
         <DataGrid
-          rows={projects}
-          columns={columns}
-          getRowId={(row) => row._id}
-          initialState={{ pagination: { paginationModel: { page: 0, pageSize: 5 } } }}
-          pageSizeOptions={[5, 10]}
-          disableSelectionOnClick
-        />
+       rows={projects}
+       columns={columns}
+       getRowId={(row) => row._id}
+ 
+       pageSize={10} // Set default page size explicitly
+       pageSizeOptions={[10, 20, 50]} // Set page size options
+       sx={{
+         "& .MuiDataGrid-root": {
+           border: "none",
+         },
+         "& .MuiDataGrid-cell": {
+           borderBottom: "none",
+         },
+         "& .name-column--cell": {
+           color: colors.greenAccent[500],
+         },
+         "& .MuiDataGrid-columnHeaders": {
+           backgroundColor: colors.blueAccent[700],
+           borderBottom: "none",
+         },
+         "& .MuiDataGrid-virtualScroller": {
+           backgroundColor: colors.primary[400],
+         },
+         "& .MuiDataGrid-footerContainer": {
+           borderTop: "none",
+           backgroundColor: colors.blueAccent[700],
+         },
+         "& .MuiCheckbox-root": {
+           color: `${colors.greenAccent[200]} !important`,
+         },
+       }}
+     />
+     
       </Box>
-
+ 
       {isPopupOpen && (
         <div className="popup">
           <div className="popup-content">
@@ -162,5 +190,5 @@ const TaskStatus = () => {
     </Box>
   );
 };
-
+ 
 export default TaskStatus;

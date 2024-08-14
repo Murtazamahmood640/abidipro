@@ -6,7 +6,7 @@ import { tokens } from "../../theme";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from "../../components/Header";
-
+ 
 const MyTasks = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -14,41 +14,42 @@ const MyTasks = () => {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
   const [reFetch, setReFetch] = useState(false);
-
+ 
   useEffect(() => {
     fetchTasks();
   }, [reFetch]);
-
+ 
   const fetchTasks = async () => {
+    console.log(JSON.parse(localStorage.getItem("name")))
     try {
-      const response = await axios.get('https://murtazamahm007-abidipro.mdbgo.io/api/my-tasks', {
-        params: { name: localStorage.getItem("name") },
+      const response = await axios.get('https://hr-backend-gamma.vercel.app/api/my-tasks', {
+        params: { name: JSON.parse(localStorage.getItem("name")).name },
       });
       setProjects(response.data);
     } catch (error) {
       toast.error("Failed to fetch tasks");
     }
   };
-
+ 
   const handleEditClick = (project) => {
     setEditingProject(project);
     setPopupOpen(true);
   };
-
+ 
   const handleDeleteClick = async (id) => {
     try {
-      await axios.delete(`https://murtazamahm007-abidipro.mdbgo.io/api/deleteTask`, { params: { _id: id } });
+      await axios.delete(`https://hr-backend-gamma.vercel.app/api/deleteTask`, { params: { _id: id } });
       setReFetch(!reFetch);
     } catch (error) {
       toast.error("Failed to delete task");
     }
   };
-
+ 
   const handlePopupClose = () => {
     setPopupOpen(false);
     setEditingProject(null);
   };
-
+ 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const formData = {
@@ -58,13 +59,13 @@ const MyTasks = () => {
       date: e.target.date.value,
       taskpriority: e.target.taskpriority.value,
     };
-
+ 
     try {
       if (editingProject) {
-        await axios.put(`https://murtazamahm007-abidipro.mdbgo.io/api/assigned-tasks/${editingProject._id}`, formData);
+        await axios.put(`https://hr-backend-gamma.vercel.app/api/assigned-tasks/${editingProject._id}`, formData);
         toast.success("Task updated successfully");
       } else {
-        await axios.post('https://murtazamahm007-abidipro.mdbgo.io/api/assigned-tasks', formData);
+        await axios.post('https://hr-backend-gamma.vercel.app/api/assigned-tasks', formData);
         toast.success("Task created successfully");
       }
       fetchTasks();
@@ -73,10 +74,10 @@ const MyTasks = () => {
       toast.error("Failed to save the task");
     }
   };
-
+ 
   const handleDropdownChange = async (event, id) => {
     try {
-      await axios.put("https://murtazamahm007-abidipro.mdbgo.io/api/updateStatus", {
+      await axios.put("https://hr-backend-gamma.vercel.app/api/updateStatus", {
         id: id,
         taskStatus: event.target.value,
       });
@@ -85,7 +86,7 @@ const MyTasks = () => {
       console.error("Failed to update", e);
     }
   };
-
+ 
   const columns = [
     { field: "projectName", headerName: "Project Name", flex: 1 },
     { field: "taskName", headerName: "Task Name", flex: 1 },
@@ -127,7 +128,7 @@ const MyTasks = () => {
     //   ),
     // },
   ];
-
+ 
   return (
     <Box m="20px">
       <Header title="MY TASKS" subtitle="Manage Your Tasks" />
@@ -153,13 +154,12 @@ const MyTasks = () => {
         <DataGrid
           rows={projects}
           columns={columns}
-          getRowId={(row) => row._id}
-          initialState={{ pagination: { paginationModel: { page: 0, pageSize: 5 } } }}
-          pageSizeOptions={[5, 10]}
-          disableSelectionOnClick
+          getRowId={(row) => row.date + row.name}
+          pageSize={10} // Set default page size explicitly
+          pageSizeOptions={[10, 20, 50]} // Set page size options
         />
       </Box>
-
+ 
       {isPopupOpen && (
         <div className="popup">
           <div className="popup-content">
@@ -234,5 +234,5 @@ const MyTasks = () => {
     </Box>
   );
 };
-
+ 
 export default MyTasks;

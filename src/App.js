@@ -40,12 +40,14 @@ import TimeoffApp from "./scenes/tables/TimeOffApp";
 import Test from "./components/Test";
 import LineChartParent from "./components/LineChartParent";
 import LineChart from "./components/LineChart";
-
+import ClockGrid from "../src/scenes/tables/Clockgrid";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Chatbot from "./components/ChatBot";
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const location = useLocation();
-  
+
   const isLoginPage = location.pathname === "/";
 
   return (
@@ -58,40 +60,42 @@ function App() {
             {!isLoginPage && <Topbar setIsSidebar={setIsSidebar} />}
             <Routes>
               <Route path="/" element={<Login />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/team" element={<Team />} />
-              <Route path="/contacts" element={<Contacts />} />
-              <Route path="/invoices" element={<Invoices />} />
-              <Route path="/createuser" element={<CreateUser />} />
-              <Route path="/createproject" element={<CreateProject />} />
-              <Route path="/employeeinfo" element={<EmployeeInfo />} />
-              <Route path="/createinvoice" element={<CreateInvoice />} />
-              <Route path="/uploaddocument" element={<Doc />} />
-              <Route path="/feedback" element={<Feedback />} />
-              <Route path="/timeoffreq" element={<SubmitTimeoff />} />
-              <Route path="/submitfeedbacks" element={<SubmitFeedbacks />} />
-              <Route path="/alldocuments" element={<AllDoc />} />
-              <Route path="/earninganddeductions" element={<Salary />} />
-              <Route path="/holidays" element={<ManageException />} />
-              <Route path="/clock" element={<Clock />} />
-              <Route path="/view" element={<View />} />
-              <Route path="/viewInvoice/:id" element={<ViewOne />} />
-              <Route path="/assigntasks" element={<AssignTasks />} />
-              <Route path="/taskstatus" element={<TaskStatus />} />
-              <Route path="/mytasks" element={<MyTasks />} />
-              <Route path="project/:projectName" element={<ProjectTaskPage />} />
-              <Route path="/account" element={<Account />} />
-              <Route path="/main" element={<MainComponent />} />
-              <Route path="/timeoffapp" element={<TimeoffApp />} />
-              <Route path="/barchart" element={<BarChart />} />
-              <Route path="/pie" element={<Pie />} />
-              <Route path="/piechart" element={<PieChart />} />
-              <Route path="/line" element={<Line />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/calendar" element={<Calendar />} />
-              <Route path="/geography" element={<Geography />} />
-              <Route path="/check" element={ <Test />} />
-              <Route path="/line" element={<LineChart />} />
+              <Route path="/dashboard" element={<ProtectedRoute Component={Dashboard} />} />
+              <Route path="/team" element={<ProtectedRoute Component={Team} />} />
+              <Route path="/contacts" element={<ProtectedRoute Component={Contacts} />} />
+              <Route path="/invoices" element={<ProtectedRoute Component={Invoices} />} />
+              <Route path="/createuser" element={<ProtectedRoute Component={CreateUser} />} />
+              <Route path="/createproject" element={<ProtectedRoute Component={CreateProject} />} />
+              <Route path="/employeeinfo" element={<ProtectedRoute Component={EmployeeInfo} />} />
+              <Route path="/createinvoice" element={<ProtectedRoute Component={CreateInvoice} />} />
+              <Route path="/uploaddocument" element={<ProtectedRoute Component={Doc} />} />
+              <Route path="/feedback" element={<ProtectedRoute Component={Feedback} />} />
+              <Route path="/timeoffreq" element={<ProtectedRoute Component={SubmitTimeoff} />} />
+              <Route path="/submitfeedbacks" element={<ProtectedRoute Component={SubmitFeedbacks} />} />
+              <Route path="/alldocuments" element={<ProtectedRoute Component={AllDoc} />} />
+              <Route path="/earninganddeductions" element={<ProtectedRoute Component={Salary} />} />
+              <Route path="/holidays" element={<ProtectedRoute Component={ManageException} />} />
+              <Route path="/clock" element={<ProtectedRoute Component={Clock} />} />
+              <Route path="/view" element={<ProtectedRoute Component={View} />} />
+              <Route path="/viewInvoice/:id" element={<ProtectedRoute Component={ViewOne} />} />
+              <Route path="/assigntasks" element={<ProtectedRoute Component={AssignTasks} />} />
+              <Route path="/taskstatus" element={<ProtectedRoute Component={TaskStatus} />} />
+              <Route path="/mytasks" element={<ProtectedRoute Component={MyTasks} />} />
+              <Route path="project/:projectName" element={<ProtectedRoute Component={ProjectTaskPage} />} />
+              <Route path="/account" element={<ProtectedRoute Component={Account} />} />
+              <Route path="/main" element={<ProtectedRoute Component={MainComponent} />} />
+              <Route path="/timeoffapp" element={<ProtectedRoute Component={TimeoffApp} />} />
+              <Route path="/barchart" element={<ProtectedRoute Component={BarChart} />} />
+              <Route path="/pie" element={<ProtectedRoute Component={Pie} />} />
+              <Route path="/piechart" element={<ProtectedRoute Component={PieChart} />} />
+              <Route path="/line" element={<ProtectedRoute Component={Line} />} />
+              <Route path="/faq" element={<ProtectedRoute Component={FAQ} />} />
+              <Route path="/calendar" element={<ProtectedRoute Component={Calendar} />} />
+              <Route path="/geography" element={<ProtectedRoute Component={Geography} />} />
+              <Route path="/check" element={<ProtectedRoute Component={Test} />} />
+              <Route path="/line" element={<ProtectedRoute Component={LineChart} />} />
+              <Route path="/clockgrid" element={<ProtectedRoute Component={ClockGrid} />} />
+              <Route path="/ChatBot" element={<ProtectedRoute Component={Chatbot} />} />
 
             </Routes>
           </main>

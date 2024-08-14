@@ -20,7 +20,7 @@ const SubmitFeedbacks = () => {
 
   const fetchFeedbacks = async () => {
     try {
-      const response = await axios.get('https://murtazamahm007-abidipro.mdbgo.io/api/feedback');
+      const response = await axios.get('https://hr-backend-gamma.vercel.app/api/feedback');
       setFeedbacks(response.data);
     } catch (error) {
       console.error('Error fetching feedback:', error);
