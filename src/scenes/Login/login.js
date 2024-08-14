@@ -26,12 +26,12 @@
 //         event.preventDefault();
 //         setError(''); // Reset error message
 //         try {
-//             const response = await axios.post('https://hr-backend-gamma.vercel.app/api/users/login', { email, password });
+//             const response = await axios.post('https://hr-backend-seven.vercel.app/api/users/login', { email, password });
 //             console.log(response.data.message);
 //             localStorage.setItem('userId', response.data.userId);
 //             localStorage.setItem('email', response.data.email);
 
-//             const name = await axios.get('https://hr-backend-gamma.vercel.app/api/getName', { params: { email: email } });
+//             const name = await axios.get('https://hr-backend-seven.vercel.app/api/getName', { params: { email: email } });
 //             localStorage.setItem('name', name.data);
 //             let currentUser = localStorage.getItem('email');
 //             // toast.success(Welcome ${currentUser});
@@ -150,13 +150,13 @@ const Login = () => {
         setLoading(true); // Start loading
 
         try {
-            const response = await axios.post('https://hr-backend-gamma.vercel.app/api/users/login', { email, password });
+            const response = await axios.post('https://hr-backend-seven.vercel.app/api/users/login', { email, password });
             console.log("data"  , response.data)
             localStorage.setItem('userId', response.data.userId);
             localStorage.setItem('email', response.data.email);
             localStorage.setItem("data", JSON.stringify(response.data))
 
-            const name = await axios.get('https://hr-backend-gamma.vercel.app/api/getName', { params: { email: email } });
+            const name = await axios.get('https://hr-backend-seven.vercel.app/api/getName', { params: { email: email } });
             localStorage.setItem('name', JSON.stringify(response.data));
             localStorage.setItem("login", "login");
 

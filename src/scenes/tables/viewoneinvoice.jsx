@@ -16,7 +16,7 @@ const ViewOne = () => {
 
   const fetchInvoice = async () => {
     try {
-      const response = await axios.get(`https://hr-backend-gamma.vercel.app/api/viewOne-invoices/`, { params: { _id: id } });
+      const response = await axios.get(`https://hr-backend-seven.vercel.app/api/viewOne-invoices/`, { params: { _id: id } });
       setInvoice(response.data[0]);
     } catch (error) {
       console.error("Error fetching invoice:", error);

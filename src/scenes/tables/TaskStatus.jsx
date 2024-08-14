@@ -22,7 +22,7 @@ const TaskStatus = () => {
  
   const fetchTasks = async () => {
     try {
-      const response = await axios.get('https://hr-backend-gamma.vercel.app/api/create-tasks', {
+      const response = await axios.get('https://hr-backend-seven.vercel.app/api/create-tasks', {
         params: { name: currentUser.name },
       });
       console.log("response",response)
@@ -39,7 +39,7 @@ const TaskStatus = () => {
  
   const handleDeleteClick = async (id) => {
     try {
-      await axios.delete(`https://hr-backend-gamma.vercel.app/api/deleteTask`, { params: { _id: id } });
+      await axios.delete(`https://hr-backend-seven.vercel.app/api/deleteTask`, { params: { _id: id } });
       setReFetch(!reFetch);
     } catch (error) {
       toast.error("Failed to delete task");
@@ -63,10 +63,10 @@ const TaskStatus = () => {
  
     try {
       if (editingProject) {
-        await axios.put(`https://hr-backend-gamma.vercel.app/api/assigned-tasks/${editingProject._id}`, formData);
+        await axios.put(`https://hr-backend-seven.vercel.app/api/assigned-tasks/${editingProject._id}`, formData);
         toast.success("Task updated successfully");
       } else {
-        await axios.post('https://hr-backend-gamma.vercel.app/api/assigned-tasks', formData);
+        await axios.post('https://hr-backend-seven.vercel.app/api/assigned-tasks', formData);
         toast.success("Task created successfully");
       }
       fetchTasks();

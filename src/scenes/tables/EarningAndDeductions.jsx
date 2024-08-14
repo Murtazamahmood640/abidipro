@@ -17,7 +17,7 @@ const EarningAndDeductions = ({ setTotalExpenses }) => {
 
   const fetchEmployees = async () => {
     try {
-      const employees = await axios.get("https://hr-backend-gamma.vercel.app/api/EmployeesPayroll");
+      const employees = await axios.get("https://hr-backend-seven.vercel.app/api/EmployeesPayroll");
       setProjects(employees.data);
 
       // Calculate the total expenses (sum of basic salaries)

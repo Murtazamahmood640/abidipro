@@ -13,7 +13,7 @@ const BarChart = ({ isDashboard = false }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://hr-backend-gamma.vercel.app/api/getUser');
+        const response = await axios.get('https://hr-backend-seven.vercel.app/api/getUser');
         const users = response.data;
 
         // Calculate the count of each role

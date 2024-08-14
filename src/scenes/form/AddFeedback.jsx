@@ -105,7 +105,7 @@ const Feedback = () => {
  
     try {
       console.log("Submitting feedback:", payload); // Log payload
-      const response = await axios.post('https://hr-backend-gamma.vercel.app/api/feedback', payload, {
+      const response = await axios.post('https://hr-backend-seven.vercel.app/api/feedback', payload, {
         headers: {
           'Content-Type': 'application/json'
         }

@@ -14,7 +14,7 @@ const EmployeeInfo = () => {
   useEffect(() => {
     const fetchManagers = async () => {
       try {
-        const response = await axios.get('https://hr-backend-gamma.vercel.app/api/getUser');
+        const response = await axios.get('https://hr-backend-seven.vercel.app/api/getUser');
         const managers = response.data.filter(user => user.status === 'Manager');
         setManagers(managers);
       } catch (error) {
@@ -31,7 +31,7 @@ const EmployeeInfo = () => {
 
   const handleFormSubmit = async (values) => {
     try {
-      const response = await axios.post('https://hr-backend-gamma.vercel.app/api/addEmploy', {
+      const response = await axios.post('https://hr-backend-seven.vercel.app/api/addEmploy', {
         ...values,
         netSalary: handleNetSalary(values),
         date: new Date().toISOString()

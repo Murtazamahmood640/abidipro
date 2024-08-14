@@ -20,7 +20,7 @@ const Team = ({ setEmployeeCount }) => {
   useEffect(() => {
     const fetchTeamData = async () => {
       try {
-        const response = await axios.get('https://hr-backend-gamma.vercel.app/api/getUser');
+        const response = await axios.get('https://hr-backend-seven.vercel.app/api/getUser');
         const data = response.data;
         setTeamData(data);
         setEmployeeCount(data.length); // Update employee count
@@ -58,7 +58,7 @@ const Team = ({ setEmployeeCount }) => {
       alert("Please select a user first!");
     } else {
       try {
-        const response = await axios.delete(`https://hr-backend-gamma.vercel.app/api/deleteUser/${selectedUser._id}`);
+        const response = await axios.delete(`https://hr-backend-seven.vercel.app/api/deleteUser/${selectedUser._id}`);
         if (response.status === 200) {
           setTeamData(teamData.filter((item) => item._id !== selectedUser._id));
           setSelectedUser(null);
@@ -74,14 +74,14 @@ const Team = ({ setEmployeeCount }) => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`https://hr-backend-gamma.vercel.app/api/updateUser/${selectedUser._id}`, {
+      await axios.put(`https://hr-backend-seven.vercel.app/api/updateUser/${selectedUser._id}`, {
         name: e.target.name.value,
         designation: e.target.designation.value,
         status: e.target.status.value,
         personalEmail: e.target.personalEmail.value,
         reportTo: e.target.reportTo.value,
       });
-      const updatedData = await axios.get('https://hr-backend-gamma.vercel.app/api/getUser');
+      const updatedData = await axios.get('https://hr-backend-seven.vercel.app/api/getUser');
       setTeamData(updatedData.data);
       setEmployeeCount(updatedData.data.length); // Update employee count
       setPopupOpen(false);
