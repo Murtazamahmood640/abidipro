@@ -22,7 +22,7 @@ const MyTasks = () => {
   const fetchTasks = async () => {
     console.log(JSON.parse(localStorage.getItem("name")))
     try {
-      const response = await axios.get('https://abidiserver.vercel.app/api/my-tasks', {
+      const response = await axios.get('https://update-abidibackend.vercel.app/api/my-tasks', {
         params: { name: JSON.parse(localStorage.getItem("name")).name },
       });
       setProjects(response.data);
@@ -38,7 +38,7 @@ const MyTasks = () => {
  
   const handleDeleteClick = async (id) => {
     try {
-      await axios.delete(`https://abidiserver.vercel.app/api/deleteTask`, { params: { _id: id } });
+      await axios.delete(`https://update-abidibackend.vercel.app/api/deleteTask`, { params: { _id: id } });
       setReFetch(!reFetch);
     } catch (error) {
       toast.error("Failed to delete task");
@@ -62,10 +62,10 @@ const MyTasks = () => {
  
     try {
       if (editingProject) {
-        await axios.put(`https://abidiserver.vercel.app/api/assigned-tasks/${editingProject._id}`, formData);
+        await axios.put(`https://update-abidibackend.vercel.app/api/assigned-tasks/${editingProject._id}`, formData);
         toast.success("Task updated successfully");
       } else {
-        await axios.post('https://abidiserver.vercel.app/api/assigned-tasks', formData);
+        await axios.post('https://update-abidibackend.vercel.app/api/assigned-tasks', formData);
         toast.success("Task created successfully");
       }
       fetchTasks();
@@ -77,7 +77,7 @@ const MyTasks = () => {
  
   const handleDropdownChange = async (event, id) => {
     try {
-      await axios.put("https://abidiserver.vercel.app/api/updateStatus", {
+      await axios.put("https://update-abidibackend.vercel.app/api/updateStatus", {
         id: id,
         taskStatus: event.target.value,
       });

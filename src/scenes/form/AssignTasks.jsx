@@ -30,7 +30,7 @@ const AssignTasks = () => {
   useEffect(() => {
     const getCreatedProjects = async () => {
       try {
-        const response = await axios.get('https://abidiserver.vercel.app/api/project/created', {
+        const response = await axios.get('https://update-abidibackend.vercel.app/api/project/created', {
           params: { name: currentUser.name },
         });
         setCreatedProject(response.data);
@@ -41,7 +41,7 @@ const AssignTasks = () => {
  
     const getActiveProjects = async () => {
       try {
-        const response = await axios.get('https://abidiserver.vercel.app/api/project/created', {
+        const response = await axios.get('https://update-abidibackend.vercel.app/api/project/created', {
           params: { name: currentUser },
         });
         setActiveProjects(response.data);
@@ -52,7 +52,7 @@ const AssignTasks = () => {
  
     const getProjectMembers = async () => {
       try {
-        const response = await axios.get('https://abidiserver.vercel.app/api/getUser');
+        const response = await axios.get('https://update-abidibackend.vercel.app/api/getUser');
         const userNames = response.data.map(user => user.name);
         setMembers(userNames);
       } catch (error) {
@@ -128,13 +128,13 @@ const AssignTasks = () => {
     try {
       if (editingIndex !== null) {
         const projectId = projects[editingIndex]._id;
-        await axios.put(`https://abidiserver.vercel.app/api/assigned-tasks/${projectId}`, formData);
+        await axios.put(`https://update-abidibackend.vercel.app/api/assigned-tasks/${projectId}`, formData);
         const updatedProjects = [...projects];
         updatedProjects[editingIndex] = { ...formData, _id: projectId };
         setProjects(updatedProjects);
         toast.success("Task updated successfully");
       } else {
-        const response = await axios.post("https://abidiserver.vercel.app/api/create-tasks", formData);
+        const response = await axios.post("https://update-abidibackend.vercel.app/api/create-tasks", formData);
         setProjects([...projects, { ...formData, _id: response.data._id }]);
         toast.success("Task added successfully");
       }

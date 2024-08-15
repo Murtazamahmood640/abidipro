@@ -7,7 +7,7 @@ const Test = () => {
 
   const fetchEmployees = async () => {
     try {
-      const { data } = await axios.get("https://abidiserver.vercel.app/api/EmployeesPayroll");
+      const { data } = await axios.get("https://update-abidibackend.vercel.app/api/EmployeesPayroll");
       const departmentData = data.reduce((acc, employee) => {
         const { department, netSalary } = employee;
         if (!acc[department]) {

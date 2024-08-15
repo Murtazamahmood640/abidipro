@@ -29,7 +29,7 @@ const CreateProject = () => {
     const getAllUsers = async () => {
       try {
         const { data } = await axios.get(
-          "https://abidiserver.vercel.app/api/getUser"
+          "https://update-abidibackend.vercel.app/api/getUser"
         );
         const userNames = data.map((user) => user.name); // Extract only names
         setUsers(userNames);
@@ -53,13 +53,13 @@ const CreateProject = () => {
     try {
       if (values._id) {
         await axios.put(
-          `https://abidiserver.vercel.app/api/projects/${values._id}`,
+          `https://update-abidibackend.vercel.app/api/projects/${values._id}`,
           formData
         );
         toast.success("Project updated successfully");
       } else {
         await axios.post(
-          "https://abidiserver.vercel.app/api/projects",
+          "https://update-abidibackend.vercel.app/api/projects",
           formData
         );
         toast.success("Project added successfully");

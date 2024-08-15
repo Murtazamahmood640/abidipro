@@ -17,7 +17,7 @@ const CreateInvoice = () => {
 
   const fetchInvoices = async () => {
     try {
-      const response = await axios.get('https://abidiserver.vercel.app/api/create-invoices');
+      const response = await axios.get('https://update-abidibackend.vercel.app/api/create-invoices');
       setProjects(response.data);
     } catch (error) {
       console.error('Error fetching invoices:', error);
@@ -27,7 +27,7 @@ const CreateInvoice = () => {
 
   const handleFormSubmit = async (values) => {
     try {
-      const response = await axios.post('https://abidiserver.vercel.app/api/invoices', {
+      const response = await axios.post('https://update-abidibackend.vercel.app/api/invoices', {
         ...values,
         date: new Date().toISOString()
       });
