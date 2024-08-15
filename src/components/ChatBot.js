@@ -20,7 +20,7 @@ const Chatbot = () => {
       setMessages([...messages, { text: input, sender: 'user' }]);
 
       try {
-        const response = await axios.post('https://hr-backend-seven.vercel.app/api/chatbot', {
+        const response = await axios.post('https://abidiserver.vercel.app/api/chatbot', {
           message: input,
         });
         console.log('Response from server:', response.data);

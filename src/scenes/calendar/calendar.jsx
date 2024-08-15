@@ -23,7 +23,7 @@ const Calendar = () => {
 
   const getEntries = async () => {
     try {
-      const res = await axios.get('https://hr-backend-seven.vercel.app/api/timeEntries', {
+      const res = await axios.get('https://abidiserver.vercel.app//api/timeEntries', {
         params: {
           email: localStorage.getItem('email')
         }
@@ -82,7 +82,7 @@ const Calendar = () => {
       });
   
       try {
-        await axios.post('https://hr-backend-seven.vercel.app/api/scheduleEvent/sendMail', {
+        await axios.post('https://abidiserver.vercel.app/api/scheduleEvent/sendMail', {
           email,
           subject: 'Event Reminder',
           message: `Your event "${title}" is scheduled for ${startTime}.`,

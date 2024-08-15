@@ -13,7 +13,7 @@ const PieChart = () => {
   useEffect(() => {
     const fetchTeamData = async () => {
       try {
-        const response = await axios.get('https://hr-backend-seven.vercel.app/api/getUser');
+        const response = await axios.get('https://abidiserver.vercel.app/api/getUser');
         setTeamData(response.data);
       } catch (error) {
         console.error('Error fetching team data', error);

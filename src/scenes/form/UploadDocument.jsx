@@ -19,7 +19,7 @@ const Doc = () => {
       formData.append('reason', values.reason);
       formData.append('file', values.file);
 
-      const res = await axios.post("https://hr-backend-seven.vercel.app/api/document", formData);
+      const res = await axios.post("https://abidiserver.vercel.app/api/document", formData);
       console.log(res);
       toast.success("File Uploaded!");
     } catch (error) {

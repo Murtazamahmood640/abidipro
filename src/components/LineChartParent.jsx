@@ -15,7 +15,7 @@ const LineChartParent = () => {
       };
       const getEntries = async () => {
         try {
-          const res = await axios.get('https://hr-backend-seven.vercel.app/api/timeEntries', {
+          const res = await axios.get('https://abidiserver.vercel.app/api/timeEntries', {
             params: {
               email: localStorage.getItem('email')
             }
